@@ -1,0 +1,6 @@
+{
+  "name": "Qualora - Food Industry AI Consultancy & Automation",
+  "description": "AI consultancy and workflow automation landing page for food companies, with multilingual support (NL, FR, EN), interactive readiness test, and discovery booking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
