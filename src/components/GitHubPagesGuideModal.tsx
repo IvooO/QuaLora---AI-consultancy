@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, GitBranch, Terminal, ExternalLink } from 'lucide-react';
+import { X, Copy, Check, GitBranch, AlertCircle, Sparkles, FolderCheck } from 'lucide-react';
 
 interface GitHubPagesGuideModalProps {
   isOpen: boolean;
@@ -20,12 +20,9 @@ export const GitHubPagesGuideModal: React.FC<GitHubPagesGuideModalProps> = ({
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const gitSnippet = `git init
-git add .
-git commit -m "Deploy Qualora landing page to GitHub Pages"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-git push -u origin main`;
+  const gitSnippet = `git add .
+git commit -m "Fix GitHub Pages deployment and docs bundle"
+git push origin main`;
 
   return (
     <div
@@ -36,7 +33,7 @@ git push -u origin main`;
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white dark:bg-[#16251D] text-[#10261C] dark:text-[#EAF1EC] w-full max-w-[640px] rounded-[24px] border border-[#D9E2DB] dark:border-[#2B4237] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white dark:bg-[#16251D] text-[#10261C] dark:text-[#EAF1EC] w-full max-w-[680px] rounded-[24px] border border-[#D9E2DB] dark:border-[#2B4237] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="p-6 pb-4 border-b border-[#D9E2DB] dark:border-[#2B4237] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -45,10 +42,10 @@ git push -u origin main`;
             </div>
             <div>
               <h3 className="font-display text-xl font-bold">
-                Publishing to GitHub Pages
+                Fixing & Publishing to GitHub Pages
               </h3>
               <p className="text-xs text-[#4A5F55] dark:text-[#9DB3A7]">
-                Automated continuous deployment is pre-configured
+                Choose either Method A (Instant /docs) or Method B (GitHub Actions)
               </p>
             </div>
           </div>
@@ -63,47 +60,66 @@ git push -u origin main`;
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-6 text-sm">
-          {/* Step 1 */}
-          <div>
-            <div className="flex items-center gap-2 font-bold text-[#10261C] dark:text-[#EAF1EC] mb-1.5">
-              <span className="w-5 h-5 rounded-full bg-[#1F7A5C] text-white dark:text-[#0E1913] text-xs flex items-center justify-center">1</span>
-              <span>Pre-configured Relative Paths & GitHub Actions</span>
+          {/* Why Pages was not working callout */}
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs">
+            <div className="flex items-center gap-2 font-bold mb-1">
+              <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>Why GitHub Pages may have shown a blank screen or 404:</span>
             </div>
-            <p className="text-xs text-[#4A5F55] dark:text-[#9DB3A7] leading-relaxed mb-2">
-              <code className="bg-[#F4F6F2] dark:bg-[#0E1913] px-1.5 py-0.5 rounded text-[11px] font-mono">vite.config.ts</code> has already been set with <code className="bg-[#F4F6F2] dark:bg-[#0E1913] px-1.5 py-0.5 rounded text-[11px] font-mono">base: './'</code> and a turnkey workflow is placed at <code className="bg-[#F4F6F2] dark:bg-[#0E1913] px-1.5 py-0.5 rounded text-[11px] font-mono">.github/workflows/deploy.yml</code>.
-            </p>
+            <ul className="list-disc pl-5 space-y-1 text-amber-800 dark:text-amber-300">
+              <li>
+                <strong>Default Root Folder:</strong> If GitHub Pages was set to deploy from <code>/ (root)</code>, browsers cannot run raw TypeScript (<code>src/main.tsx</code>) without Vite.
+              </li>
+              <li>
+                <strong>Peer Dependency Conflict in CI:</strong> The previous npm lockfile had an esbuild peer dependency conflict that failed GitHub Actions. This has now been resolved.
+              </li>
+            </ul>
           </div>
 
-          {/* Step 2 */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-2 font-bold text-[#10261C] dark:text-[#EAF1EC]">
-                <span className="w-5 h-5 rounded-full bg-[#1F7A5C] text-white dark:text-[#0E1913] text-xs flex items-center justify-center">2</span>
-                <span>Push code to your GitHub repository</span>
+          {/* Solution 1: Direct /docs folder */}
+          <div className="p-4 rounded-xl bg-[#F4F6F2] dark:bg-[#0E1913] border border-[#D9E2DB] dark:border-[#2B4237]">
+            <div className="flex items-center gap-2 font-bold text-[#10261C] dark:text-[#EAF1EC] mb-2">
+              <FolderCheck className="w-4 h-4 text-[#1F7A5C] dark:text-[#4DBB93]" />
+              <span>Method 1 (Fastest & Guaranteed): Deploy via <code>/docs</code> folder</span>
+            </div>
+            <p className="text-xs text-[#4A5F55] dark:text-[#9DB3A7] leading-relaxed mb-3">
+              We generated a production-ready, compiled static bundle in the <code className="bg-white dark:bg-[#16251D] px-1.5 py-0.5 rounded border border-[#D9E2DB] dark:border-[#2B4237] font-mono">/docs</code> folder with <code className="font-mono">.nojekyll</code> and <code className="font-mono">404.html</code> fallbacks.
+            </p>
+            <ol className="list-decimal pl-5 text-xs text-[#10261C] dark:text-[#EAF1EC] space-y-1.5 font-medium">
+              <li>In your GitHub repo, click <strong>Settings</strong> → <strong>Pages</strong>.</li>
+              <li>Under <strong>Build and deployment</strong> &gt; <strong>Source</strong>: select <strong>Deploy from a branch</strong>.</li>
+              <li>Branch: select <strong>main</strong> (or <strong>master</strong>), and choose <strong>/docs</strong> as folder.</li>
+              <li>Click <strong>Save</strong>. It goes live within 60 seconds!</li>
+            </ol>
+          </div>
+
+          {/* Solution 2: Automated GitHub Actions */}
+          <div className="p-4 rounded-xl bg-[#F4F6F2] dark:bg-[#0E1913] border border-[#D9E2DB] dark:border-[#2B4237]">
+            <div className="flex items-center gap-2 font-bold text-[#10261C] dark:text-[#EAF1EC] mb-2">
+              <Sparkles className="w-4 h-4 text-[#1F7A5C] dark:text-[#4DBB93]" />
+              <span>Method 2 (Continuous CI): Deploy via GitHub Actions</span>
+            </div>
+            <p className="text-xs text-[#4A5F55] dark:text-[#9DB3A7] leading-relaxed mb-3">
+              We updated <code className="bg-white dark:bg-[#16251D] px-1.5 py-0.5 rounded border border-[#D9E2DB] dark:border-[#2B4237] font-mono">.github/workflows/deploy.yml</code> to run with resolved peer dependencies and trigger on both <code>main</code> and <code>master</code>.
+            </p>
+            <ol className="list-decimal pl-5 text-xs text-[#10261C] dark:text-[#EAF1EC] space-y-1.5 font-medium">
+              <li>In your GitHub repo, go to <strong>Settings</strong> → <strong>Pages</strong>.</li>
+              <li>Under <strong>Source</strong>: select <strong>GitHub Actions</strong>.</li>
+              <li>Push the latest code:</li>
+            </ol>
+            <div className="mt-3 relative">
+              <div className="bg-[#10261C] text-[#DDE9E1] p-3 rounded-lg font-mono text-xs overflow-x-auto leading-relaxed border border-[#2B4237]">
+                <pre>{gitSnippet}</pre>
               </div>
               <button
                 type="button"
                 onClick={() => copyToClipboard(gitSnippet, 1)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-[#1F7A5C] dark:text-[#4DBB93] hover:underline cursor-pointer"
+                className="absolute top-2 right-2 text-xs font-semibold px-2 py-1 rounded bg-[#1F7A5C] text-white hover:bg-[#17634A] transition-colors cursor-pointer flex items-center gap-1"
               >
-                {copiedIndex === 1 ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedIndex === 1 ? 'Copied' : 'Copy commands'}</span>
+                {copiedIndex === 1 ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedIndex === 1 ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
-            <div className="bg-[#10261C] text-[#DDE9E1] p-3.5 rounded-xl font-mono text-xs overflow-x-auto leading-relaxed border border-[#2B4237]">
-              <pre>{gitSnippet}</pre>
-            </div>
-          </div>
-
-          {/* Step 3 */}
-          <div>
-            <div className="flex items-center gap-2 font-bold text-[#10261C] dark:text-[#EAF1EC] mb-1.5">
-              <span className="w-5 h-5 rounded-full bg-[#1F7A5C] text-white dark:text-[#0E1913] text-xs flex items-center justify-center">3</span>
-              <span>Enable GitHub Actions in Repository Settings</span>
-            </div>
-            <p className="text-xs text-[#4A5F55] dark:text-[#9DB3A7] leading-relaxed">
-              In your GitHub repository, go to <strong>Settings</strong> → <strong>Pages</strong> → Under <strong>Build and deployment</strong>, change <strong>Source</strong> from <em>Deploy from a branch</em> to <strong>GitHub Actions</strong>. Your site will immediately build and publish live!
-            </p>
           </div>
         </div>
 
