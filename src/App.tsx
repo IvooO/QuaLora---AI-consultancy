@@ -5,18 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Language } from './types';
-import { TRANSLATIONS } from './data/translations';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { Services } from './components/Services';
-import { AiReadinessQuiz } from './components/AiReadinessQuiz';
-import { ContactSection } from './components/ContactSection';
-import { DiscoveryModal } from './components/DiscoveryModal';
-import { GitHubPagesGuideModal } from './components/GitHubPagesGuideModal';
-import { Footer } from './components/Footer';
+import { TRANSLATIONS, TYPEFORM_FEEDBACK_URL } from './data/translations';
 
 export default function App() {
-  // Initialize language from localStorage or browser preferences
   const [lang, setLang] = useState<Language>(() => {
     try {
       const stored = localStorage.getItem('ql') as Language;
@@ -33,22 +24,6 @@ export default function App() {
     return 'en';
   });
 
-  // Dark mode theme state
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    try {
-      const storedTheme = localStorage.getItem('ql_theme');
-      if (storedTheme) return storedTheme === 'dark';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    } catch {
-      return false;
-    }
-  });
-
-  // Modals state
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [isGhGuideOpen, setIsGhGuideOpen] = useState(false);
-
-  // Sync language with document element
   useEffect(() => {
     document.documentElement.lang = lang;
     try {
@@ -56,109 +31,177 @@ export default function App() {
     } catch {
       // Ignore
     }
-
-    // Update document title dynamically
-    const titles: Record<Language, string> = {
-      en: "Qualora – AI consultancy and workflow automation for food companies",
-      nl: "Qualora – AI-advies en workflowautomatisering voor voedingsbedrijven",
-      fr: "Qualora – Conseil en IA et automatisation des workflows pour entreprises alimentaires"
-    };
-    document.title = titles[lang] || titles.en;
   }, [lang]);
 
-  // Sync theme with document root
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.remove('dark');
-    }
-    try {
-      localStorage.setItem('ql_theme', isDark ? 'dark' : 'light');
-    } catch {
-      // Ignore
-    }
-  }, [isDark]);
-
-  const handleLanguageChange = (newLang: Language) => {
-    setLang(newLang);
-  };
-
-  const handleToggleTheme = () => {
-    setIsDark((prev) => !prev);
-  };
-
-  const scrollToQuiz = () => {
-    const el = document.getElementById('readiness');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F4F6F2] dark:bg-[#0E1913] text-[#10261C] dark:text-[#EAF1EC] transition-colors duration-200">
+    <div>
       {/* Top Bar */}
-      <Navbar
-        lang={lang}
-        onLanguageChange={handleLanguageChange}
-        t={t}
-        onOpenBooking={() => setIsBookingOpen(true)}
-        isDark={isDark}
-        onToggleTheme={handleToggleTheme}
-      />
+      <div
+        className="c"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingTop: '20px',
+          paddingBottom: '20px',
+        }}
+      >
+        <a href="#top" className="d" style={{ fontSize: '26px' }}>
+          Qualora.
+        </a>
+        <nav>
+          <a href="#services">{t.n1}</a>
+          <a href="#contact">{t.n2}</a>
+          <div className="lang" role="group" aria-label="Language">
+            <button
+              type="button"
+              data-l="nl"
+              aria-pressed={lang === 'nl'}
+              onClick={() => setLang('nl')}
+            >
+              NL
+            </button>
+            <button
+              type="button"
+              data-l="fr"
+              aria-pressed={lang === 'fr'}
+              onClick={() => setLang('fr')}
+            >
+              FR
+            </button>
+            <button
+              type="button"
+              data-l="en"
+              aria-pressed={lang === 'en'}
+              onClick={() => setLang('en')}
+            >
+              EN
+            </button>
+          </div>
+        </nav>
+      </div>
 
-      {/* Main Content */}
-      <main className="flex-1">
-        {/* Hero Section */}
-        <Hero
-          t={t}
-          onOpenBooking={() => setIsBookingOpen(true)}
-          onScrollToQuiz={scrollToQuiz}
-        />
+      {/* Hero Header */}
+      <header
+        id="top"
+        className="c"
+        style={{ paddingTop: '64px', paddingBottom: '96px' }}
+      >
+        <p className="eb">{t.he}</p>
+        <h1
+          className="d"
+          style={{
+            fontSize: 'clamp(38px, 7vw, 68px)',
+            marginBottom: '22px',
+            maxWidth: '920px',
+          }}
+        >
+          {t.h1}
+        </h1>
+        <p style={{ fontSize: '20px', maxWidth: '620px', margin: '0 0 32px' }}>
+          {t.hs}
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
+          <a href="#contact" className="btn g">
+            {t.b1}
+          </a>
+          <a
+            href={TYPEFORM_FEEDBACK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn o"
+          >
+            {t.b2}
+          </a>
+        </div>
+      </header>
 
-        {/* Services Section */}
-        <Services
-          t={t}
-          onOpenBooking={() => setIsBookingOpen(true)}
-        />
+      {/* Services Section */}
+      <section id="services" style={{ background: 'var(--card)' }}>
+        <div className="c sec">
+          <p className="eb">{t.e1}</p>
+          <h2
+            className="d"
+            style={{
+              fontSize: 'clamp(30px, 5vw, 42px)',
+              marginBottom: '32px',
+              maxWidth: '780px',
+            }}
+          >
+            {t.t1}
+          </h2>
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            }}
+          >
+            <div className="dk">
+              <h3>{t.c1t}</h3>
+              <p>{t.c1d}</p>
+            </div>
+            <div className="dk">
+              <h3>{t.c2t}</h3>
+              <p>{t.c2d}</p>
+            </div>
+          </div>
+          <p style={{ margin: '28px 0 0', fontWeight: 700 }}>{t.fa}</p>
+        </div>
+      </section>
 
-        {/* Interactive Food AI Readiness Assessment */}
-        <AiReadinessQuiz
-          t={t}
-          onOpenBooking={() => setIsBookingOpen(true)}
-        />
-
-        {/* Contact & Discovery Section */}
-        <ContactSection
-          t={t}
-          onOpenBooking={() => setIsBookingOpen(true)}
-        />
-      </main>
+      {/* Contact Section */}
+      <section
+        id="contact"
+        style={{ background: 'var(--acc)', color: '#10261C' }}
+      >
+        <div className="c" style={{ paddingTop: '72px', paddingBottom: '72px' }}>
+          <h2
+            className="d"
+            style={{
+              fontSize: 'clamp(30px, 5vw, 44px)',
+              marginBottom: '14px',
+              maxWidth: '760px',
+            }}
+          >
+            {t.ct}
+          </h2>
+          <p style={{ maxWidth: '620px', margin: '0 0 24px' }}>{t.cd}</p>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: '20px' }}>
+            <a
+              href="mailto:hello@qualora.be"
+              style={{ textDecoration: 'underline' }}
+            >
+              hello@qualora.be
+            </a>{' '}
+            ·{' '}
+            <a href="tel:+3225884210" style={{ textDecoration: 'underline' }}>
+              +32 (0)2 588 42 10
+            </a>
+          </p>
+        </div>
+      </section>
 
       {/* Footer */}
-      <Footer
-        t={t}
-        lang={lang}
-        onLanguageChange={handleLanguageChange}
-        onOpenGhGuide={() => setIsGhGuideOpen(true)}
-      />
-
-      {/* Discovery Booking Modal */}
-      <DiscoveryModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-        t={t}
-      />
-
-      {/* GitHub Pages Deployment Guide Modal */}
-      <GitHubPagesGuideModal
-        isOpen={isGhGuideOpen}
-        onClose={() => setIsGhGuideOpen(false)}
-      />
+      <footer
+        className="c"
+        style={{
+          paddingTop: '28px',
+          paddingBottom: '36px',
+          fontSize: '14px',
+          color: 'var(--mute)',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '10px 24px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <span>Qualora SRL / BV · BCE / BTW BE 0123.456.789</span>
+        <span>{t.ft}</span>
+      </footer>
     </div>
   );
 }
