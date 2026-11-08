@@ -52,6 +52,8 @@ html {
   scroll-padding-top: env(safe-area-inset-top, 0px);
   scroll-behavior: smooth;
   font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -73,35 +75,61 @@ a {
   padding: 0 24px;
 }
 
+/* Master Typography Class - Bricolage Grotesque */
 .d {
   font-family: 'Bricolage Grotesque', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   line-height: 1.08;
   margin: 0;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
+/* Brand Wordmark Logo */
+.brand-logo {
+  font-family: 'Bricolage Grotesque', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.brand-logo:hover {
+  opacity: 0.85;
+}
+
+/* Eyebrow Label */
 .eb {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-weight: 700;
   font-size: 13px;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accT);
+  line-height: 1.2;
 }
 
+/* Primary and Outline Action Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 15px 26px;
+  padding: 15px 28px;
   border-radius: 999px;
   font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
   border: 2px solid transparent;
-  font: inherit;
+  font-family: inherit;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 48px;
   text-decoration: none;
+  white-space: nowrap;
   transition: all 0.15s ease;
 }
 
@@ -126,74 +154,114 @@ a {
   color: var(--bg);
 }
 
-.grid {
-  display: grid;
+/* Top Navigation Row */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.card {
-  background: var(--card);
-  border-radius: 20px;
-  padding: 26px;
-}
-
-.dk {
-  background: var(--dcard);
-  color: var(--darkT);
-  border-radius: 20px;
-  padding: 30px;
-}
-
-.dk h3 {
-  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-  font-size: 24px;
-  line-height: 1.15;
-  margin: 0 0 8px;
-  color: var(--darkT);
-}
-
-.dk p {
-  margin: 0;
-  color: var(--darkT);
-  opacity: 0.9;
-}
-
-.sec {
-  padding: 80px 0;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  min-height: 80px;
 }
 
 nav {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px 22px;
   align-items: center;
+  gap: 24px;
   font-weight: 500;
+  font-size: 15px;
 }
 
+nav a {
+  color: var(--ink);
+  line-height: 1;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+nav a:hover {
+  opacity: 0.75;
+}
+
+/* Language Selector */
 .lang {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
   gap: 4px;
+  margin-left: 6px;
 }
 
 .lang button {
-  font: inherit;
-  font-size: 14px;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.04em;
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 6px 12px;
-  min-height: 36px;
+  padding: 5px 12px;
+  min-height: 32px;
+  line-height: 1;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.15s ease;
+}
+
+.lang button:hover {
+  border-color: var(--ink);
 }
 
 .lang button[aria-pressed="true"] {
   background: var(--ink);
   color: var(--bg);
   border-color: var(--ink);
+}
+
+/* Grid & Cards */
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--line);
+}
+
+.dk {
+  background: var(--dcard);
+  color: var(--darkT);
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dk h3 {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-size: 26px;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--darkT);
+}
+
+.dk p {
+  margin: 0;
+  color: var(--darkT);
+  opacity: 0.92;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.sec {
+  padding: 80px 0;
 }
 
 .btn:focus-visible, .lang button:focus-visible, a:focus-visible {

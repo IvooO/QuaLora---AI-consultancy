@@ -10,7 +10,7 @@ import { LoraPage } from './LoraPage';
 
 export default function App() {
   const [view, setView] = useState<'qualora' | 'lora'>(() => {
-    if (typeof window !== 'undefined' && (window.location.hash === '#lora' || window.location.hash === '#lora-app' || window.location.hash === '#lora-page')) {
+    if (typeof window !== 'undefined' && (window.location.hash === '#lora-app' || window.location.hash === '#lora-page')) {
       return 'lora';
     }
     return 'qualora';
@@ -36,7 +36,7 @@ export default function App() {
     const handleHashChange = () => {
       if (window.location.hash === '#lora-app' || window.location.hash === '#lora-page') {
         setView('lora');
-      } else if (window.location.hash === '#top' || window.location.hash === '#services' || window.location.hash === '#contact') {
+      } else if (window.location.hash === '#top' || window.location.hash === '#services' || window.location.hash === '#contact' || window.location.hash === '') {
         setView('qualora');
       }
     };
@@ -78,43 +78,13 @@ export default function App() {
 
   return (
     <div>
-      {/* Top Bar */}
-      <div
-        className="c"
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingTop: '20px',
-          paddingBottom: '20px',
-        }}
-      >
-        <a href="#top" className="d" style={{ fontSize: '26px' }}>
-          Qualora.
+      {/* Top Bar with Precision Designer Optical Alignment */}
+      <div className="c top-nav">
+        <a href="#top" className="brand-logo d" style={{ fontSize: '34px' }}>
+          Qualora<span style={{ color: 'var(--acc)' }}>.</span>
         </a>
         <nav>
           <a href="#services">{t.n1}</a>
-          <button
-            type="button"
-            onClick={() => {
-              setView('lora');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              padding: 0,
-              font: 'inherit',
-              color: 'inherit',
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
-            title="Open Lora"
-          >
-            Lora.
-          </button>
           <a href="#contact">{t.n2}</a>
           <div className="lang" role="group" aria-label="Language">
             <button
@@ -158,11 +128,12 @@ export default function App() {
             fontSize: 'clamp(38px, 7vw, 68px)',
             marginBottom: '22px',
             maxWidth: '920px',
+            lineHeight: 1.06,
           }}
         >
           {t.h1}
         </h1>
-        <p style={{ fontSize: '20px', maxWidth: '620px', margin: '0 0 32px' }}>
+        <p style={{ fontSize: '20px', maxWidth: '620px', margin: '0 0 32px', lineHeight: 1.55 }}>
           {t.hs}
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
@@ -190,6 +161,7 @@ export default function App() {
               fontSize: 'clamp(30px, 5vw, 42px)',
               marginBottom: '32px',
               maxWidth: '780px',
+              lineHeight: 1.12,
             }}
           >
             {t.t1}
@@ -209,7 +181,7 @@ export default function App() {
               <p>{t.c2d}</p>
             </div>
           </div>
-          <p style={{ margin: '28px 0 0', fontWeight: 700 }}>{t.fa}</p>
+          <p style={{ margin: '28px 0 0', fontWeight: 700, fontSize: '17px' }}>{t.fa}</p>
         </div>
       </section>
 
@@ -230,10 +202,12 @@ export default function App() {
               <p className="eb" style={{ color: 'var(--acc)' }}>
                 {t.le}
               </p>
-              <h3 className="d" style={{ fontSize: '30px' }}>
+              <h3 className="d" style={{ fontSize: '30px', margin: '0 0 10px', lineHeight: 1.15 }}>
                 {t.lt}
               </h3>
-              <p style={{ marginTop: '10px' }}>{t.ld}</p>
+              <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, opacity: 0.92 }}>
+                {t.ld}
+              </p>
             </div>
             <button
               type="button"
@@ -262,11 +236,14 @@ export default function App() {
               fontSize: 'clamp(30px, 5vw, 44px)',
               marginBottom: '14px',
               maxWidth: '760px',
+              lineHeight: 1.12,
             }}
           >
             {t.ct}
           </h2>
-          <p style={{ maxWidth: '620px', margin: '0 0 24px' }}>{t.cd}</p>
+          <p style={{ maxWidth: '620px', margin: '0 0 24px', fontSize: '19px', lineHeight: 1.5 }}>
+            {t.cd}
+          </p>
           <p style={{ margin: 0, fontWeight: 700, fontSize: '20px' }}>
             <a
               href="mailto:hello@qualora.be"
@@ -294,6 +271,7 @@ export default function App() {
           flexWrap: 'wrap',
           gap: '10px 24px',
           justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <span>Qualora SRL / BV · BCE / BTW BE 0123.456.789</span>
