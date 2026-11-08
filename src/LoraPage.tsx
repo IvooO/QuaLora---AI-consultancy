@@ -189,16 +189,18 @@ export const LoraPage: React.FC<LoraPageProps> = ({ onBackToQualora, initialLang
             </p>
             <div className="flex flex-wrap gap-3.5 mb-10">
               <a
-                href="mailto:hello@qualora.be?subject=Ik%20stuur%20een%20vragenlijst%20mee"
+                href="https://form.typeform.com/to/RcNgG6Kb"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-3.5 rounded-full font-semibold text-base bg-[#1E7253] hover:bg-[#155840] text-white dark:bg-[#4FB88F] dark:text-[#0B1A13] dark:hover:bg-[#6CCBA5] transition-all shadow-sm hover:shadow-md"
               >
-                {lang === 'nl' ? 'Stuur één vragenlijst' : 'Send one questionnaire'}
+                {lang === 'nl' ? 'Zet je op de wachtlijst' : 'Join the waitlist'}
               </a>
               <a
-                href="#lora-bewijs"
+                href="mailto:hello@qualora.be?subject=Contact%20Sales%20-%20Lora"
                 className="inline-flex items-center justify-center px-6 py-3.5 rounded-full font-semibold text-base border-2 border-[#16180F] dark:border-[#EEF0E6] text-[#16180F] dark:text-[#EEF0E6] hover:bg-[#16180F] hover:text-[#F7F6F1] dark:hover:bg-[#EEF0E6] dark:hover:text-[#12150F] transition-all"
               >
-                {lang === 'nl' ? 'Zie een voorbeeld' : 'See an example'}
+                {lang === 'nl' ? 'Contacteer sales' : 'Contact sales'}
               </a>
             </div>
             <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-5 border-t border-[#DCDAD0] dark:border-[#2D3226] text-sm text-[#4B4E45] dark:text-[#A9AD9F] list-none p-0 m-0">

@@ -30,11 +30,17 @@ nav{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;font-weight:500
 .lang button{font:inherit;font-size:14px;font-weight:700;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;min-height:36px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .btn:focus-visible,.lang button:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.brand-logo-img{display:block;height:48px;width:auto;max-width:235px;object-fit:contain}
+@media(min-width:768px){.brand-logo-img{height:52px;max-width:255px}}
+@media(max-width:480px){.brand-logo-img{height:40px;max-width:190px}}
+.dark-logo{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .light-logo{display:none}:root:not([data-theme="light"]) .dark-logo{display:block}}
+:root[data-theme="dark"] .light-logo{display:none}:root[data-theme="dark"] .dark-logo{display:block}
 </style>
 </head>
 <body>
-<div class="c" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;min-height:80px">
-<a href="#top" class="d" style="font-size:34px;font-weight:800;letter-spacing:-0.03em;line-height:1;display:inline-flex;align-items:center">Qualora<span style="color:var(--acc)">.</span></a>
+<div class="c" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;min-height:92px">
+<a href="#top" aria-label="Qualora" style="display:inline-flex;align-items:center;line-height:1;text-decoration:none"><img src="assets/qualora-logo.png" alt="Qualora" class="brand-logo-img light-logo" width="426" height="101"><img src="assets/qualora-logo-dark.png" alt="Qualora" class="brand-logo-img dark-logo" width="426" height="101"></a>
 <nav><a href="#services" data-k="n1"></a><a href="#contact" data-k="n2"></a>
 <div class="lang" role="group" aria-label="Language"><button data-l="nl">NL</button><button data-l="fr">FR</button><button data-l="en">EN</button></div></nav>
 </div>

@@ -80,8 +80,25 @@ export default function App() {
     <div>
       {/* Top Bar with Precision Designer Optical Alignment */}
       <div className="c top-nav">
-        <a href="#top" className="brand-logo d" style={{ fontSize: '34px' }}>
-          Qualora<span style={{ color: 'var(--acc)' }}>.</span>
+        <a href="#top" className="brand-logo-link" aria-label="Qualora">
+          <img
+            src="./assets/qualora-logo.png"
+            alt="Qualora"
+            className="brand-logo-img light-logo"
+            width={426}
+            height={101}
+            loading="eager"
+            decoding="async"
+          />
+          <img
+            src="./assets/qualora-logo-dark.png"
+            alt="Qualora"
+            className="brand-logo-img dark-logo"
+            width={426}
+            height={101}
+            loading="eager"
+            decoding="async"
+          />
         </a>
         <nav>
           <a href="#services">{t.n1}</a>
