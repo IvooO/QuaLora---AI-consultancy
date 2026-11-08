@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lora — de assistent voor leveranciersvragenlijsten | een toepassing van Qualora</title>
+<meta name="description" content="Lora beantwoordt de kwaliteitsvragenlijsten van je retailers rechtstreeks uit je Google Docs en Word-documenten. Elk antwoord met een bron. Jij ondertekent.">
+<style>
+:root{
+  --bg:#F7F6F1;--bg2:#FFFFFF;--ink:#16180F;--soft:#4B4E45;--line:#DCDAD0;
+  --green:#1E7253;--green-d:#155840;--amber:#B57614;--red:#A5341F;--violet:#6B4A8F;
+  --tint:rgba(30,114,83,.07);--on-green:#fff;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12150F;--bg2:#1A1E16;--ink:#EEF0E6;--soft:#A9AD9F;--line:#2D3226;
+  --green:#4FB88F;--green-d:#6CCBA5;--amber:#E0A23A;--red:#E5735E;--violet:#B497D6;
+  --tint:rgba(79,184,143,.1);--on-green:#0B1A13}}
+:root[data-theme="dark"]{
+  --bg:#12150F;--bg2:#1A1E16;--ink:#EEF0E6;--soft:#A9AD9F;--line:#2D3226;
+  --green:#4FB88F;--green-d:#6CCBA5;--amber:#E0A23A;--red:#E5735E;--violet:#B497D6;
+  --tint:rgba(79,184,143,.1);--on-green:#0B1A13}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.015em;margin:0}
+p{margin:0}a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);font-weight:600}
+.lede{font-size:19px;color:var(--soft);max-width:60ch}
+.sec{padding:72px 0}
+.alt{background:var(--bg2);border-block:1px solid var(--line)}
+h2{font-size:clamp(28px,3.4vw,40px);margin-top:12px;max-width:26ch;line-height:1.15}
+.btn{display:inline-block;padding:14px 22px;border-radius:8px;font-weight:600;font-size:16px;text-decoration:none;border:1px solid transparent}
+.btn-p{background:var(--green);color:var(--on-green)}.btn-p:hover{background:var(--green-d)}
+.btn-g{border-color:var(--ink)}.btn-g:hover{background:var(--tint)}
+header{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{font-family:var(--serif);font-size:26px;font-weight:600;text-decoration:none}
+.nav nav{display:flex;gap:24px;align-items:center;font-size:15px}
+.nav nav a:not(.btn){text-decoration:none;color:var(--soft)}.nav nav a:not(.btn):hover{color:var(--ink)}
+@media(max-width:760px){.nav nav a:not(.btn){display:none}}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:72px 0 64px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+h1{font-size:clamp(36px,5vw,58px);line-height:1.06;margin-top:16px}
+.trust{display:flex;gap:10px 24px;flex-wrap:wrap;list-style:none;padding:20px 0 0;margin:36px 0 0;font-size:14px;color:var(--soft);border-top:1px solid var(--line)}
+.trust li::before{content:"✓ ";color:var(--green);font-weight:700}
+.board{background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.08)}
+.board-h{display:flex;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);font-size:13px;color:var(--soft)}
+.board-h b{color:var(--ink)}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:start;padding:13px 18px;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border:0}
+.row small{display:block;color:var(--soft);font-size:12.5px;margin-top:2px}
+.n{color:var(--soft);font-variant-numeric:tabular-nums}
+.pill{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap;border:1px solid currentColor}
+.ok{color:var(--green)}.mid{color:var(--amber)}.no{color:var(--red)}.cx{color:var(--violet)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:28px;margin-top:40px}
+.st{border-top:2px solid currentColor;padding-top:18px}
+.st h3{font-size:21px;color:var(--ink)}.st p{color:var(--soft);margin-top:8px;font-size:16px}
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:34px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:22px}
+.card .k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.card .v{font-family:var(--serif);font-size:34px;margin-top:6px}
+.card p:last-child{font-size:15px;color:var(--soft);margin-top:6px}
+.note{margin-top:24px;padding:22px 24px;border-left:3px solid var(--green);background:var(--tint);border-radius:0 10px 10px 0}
+.steps{list-style:none;padding:0;margin:40px 0 0;display:grid;gap:26px;max-width:820px}
+.steps li{display:grid;grid-template-columns:52px 1fr;gap:16px}
+.steps .num{font-family:var(--serif);font-size:30px;color:var(--green)}
+.steps h3{font-size:20px}.steps p{color:var(--soft);margin-top:6px}
+.faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:28px;margin-top:38px}
+.faq h3{font-size:19px}.faq p{color:var(--soft);margin-top:8px;font-size:16px}
+.pilot{background:var(--green);color:var(--on-green)}
+.pilot .in{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:center;padding:60px 0}
+@media(max-width:800px){.pilot .in{grid-template-columns:1fr}}
+.pilot h2{color:inherit}
+.pilot .btn{background:var(--on-green);color:var(--green)}
+footer{border-top:1px solid var(--line);padding:32px 0 36px;font-size:14px;color:var(--soft)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{text-decoration:none}
+body{background-image:radial-gradient(900px 440px at 88% -60px,color-mix(in srgb,var(--green) 16%,transparent),transparent 70%),radial-gradient(620px 360px at -5% 0,color-mix(in srgb,var(--amber) 10%,transparent),transparent 70%);background-repeat:no-repeat}
+h1{font-size:clamp(38px,5.2vw,64px);line-height:1.04;letter-spacing:-.025em}
+h1 em{font-style:normal;color:var(--green);background:linear-gradient(transparent 64%,color-mix(in srgb,var(--green) 22%,transparent) 0);padding:0 .08em}
+h2{letter-spacing:-.022em}
+.btn{border-radius:999px;padding:14px 26px;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-p{box-shadow:0 6px 18px color-mix(in srgb,var(--green) 35%,transparent)}
+header{background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.board{border-radius:18px;box-shadow:0 30px 70px -20px rgba(20,40,30,.28),0 2px 0 var(--line);transform:rotate(-.6deg)}
+.board-h{background:var(--tint)}
+.bar{height:4px;background:var(--line)}
+.bar i{display:block;height:100%;width:80%;background:var(--green);transform-origin:left;animation:grow 1.3s .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.row{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
+.row:nth-of-type(1){animation-delay:.5s}.row:nth-of-type(2){animation-delay:.65s}.row:nth-of-type(3){animation-delay:.8s}.row:nth-of-type(4){animation-delay:.95s}
+.pill.ok{background:color-mix(in srgb,var(--green) 13%,transparent)}.pill.mid{background:color-mix(in srgb,var(--amber) 13%,transparent)}.pill.no{background:color-mix(in srgb,var(--red) 12%,transparent)}.pill.cx{background:color-mix(in srgb,var(--violet) 13%,transparent)}
+.pill{border-color:transparent}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border:1px solid var(--line);border-radius:18px;background:var(--bg2);margin:0 24px 8px;overflow:hidden}
+@media(min-width:1170px){.stats{margin:0 auto 8px;max-width:1072px}}
+.stats div{padding:26px 28px;border-right:1px solid var(--line)}.stats div:last-child{border:0}
+.stats b{display:block;font-family:var(--serif);font-size:40px;line-height:1;color:var(--green);letter-spacing:-.02em}
+.stats span{display:block;margin-top:8px;font-size:14px;color:var(--soft)}
+.st{border:1px solid var(--line);border-top:3px solid currentColor;border-radius:16px;padding:24px;background:var(--bg);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.st:hover{transform:translateY(-4px);box-shadow:0 18px 36px -18px rgba(20,40,30,.3)}
+.card{border-radius:16px;transition:transform .25s,box-shadow .25s}.card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -20px rgba(20,40,30,.3)}
+.note{border-radius:0 16px 16px 0}
+.steps li{padding:22px 24px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.pilot{background:linear-gradient(135deg,var(--green),color-mix(in srgb,var(--green) 70%,#000))}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.row,.bar i{animation:none}.rv{opacity:1;transform:none;transition:none}.btn,.st,.card{transition:none}}
+.brand .app{font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--green);border:1px solid var(--line);border-radius:99px;padding:3px 10px;margin-left:10px;vertical-align:middle}
+@media(max-width:480px){.brand .app{display:none}}
+.L[hidden]{display:none}
+.lg{display:inline-flex;gap:4px}
+.lg button{font:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 11px;min-height:32px;cursor:pointer}
+.lg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lg button:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="L" data-l="nl">
+<header><div class="wrap nav">
+  <a class="brand" href="#top">Lora.<span class="app">Een toepassing van Qualora</span></a>
+  <nav>
+    <a href="#wat">Wat je krijgt</a><a href="#bewijs">Voorbeeld</a><a href="#docs">Documenten</a><a href="#pilot">Pilot</a>
+    <span class="lg" role="group" aria-label="Language"><button data-set="nl" aria-pressed="true">NL</button> <button data-set="en" aria-pressed="false">EN</button></span>
+    <a class="btn btn-p" style="padding:10px 16px;font-size:15px" href="mailto:hello@qualora.be?subject=Gesprek%20Qualora">Plan een gesprek</a>
+  </nav>
+</div></header>
+
+<main id="top">
+<section class="wrap hero">
+  <div>
+    <p class="eyebrow">Een toepassing van Qualora · QA &amp; voedselveiligheid</p>
+    <h1>De vragenlijst van je retailer. <em>Nog dezelfde dag klaar voor review,</em> elk antwoord met een bron.</h1>
+    <p class="lede" style="margin-top:22px">Lora beantwoordt de kwaliteitsvragenlijsten van je klanten rechtstreeks uit je Google Docs en Word-documenten: specificaties, HACCP-plan, inspectieverslagen. Wat niet te bewijzen is, meldt ze. Jij beoordeelt, ondertekent en verzendt, in je eigen tempo. Zo wordt elke QA-manager een super QA-manager.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px">
+      <a class="btn btn-p" href="mailto:hello@qualora.be?subject=Ik%20stuur%20een%20vragenlijst%20mee">Stuur één vragenlijst</a>
+      <a class="btn btn-g" href="#bewijs">Zie een voorbeeld</a>
+    </div>
+    <ul class="trust"><li>Werkt met Google Docs en Word</li><li>Alleen-lezen toegang</li><li>Lora verzendt nooit zelf</li></ul>
+  </div>
+  <div class="board" aria-label="Voorbeeld van het reviewbord">
+    <div class="board-h"><span><b>Retailer-audit 2026</b> · 77 vragen</span><span>62 klaar · 15 voor jou</span></div>
+    <div class="bar"><i></i></div>
+    <div class="row"><span class="n">4.2</span><div>Is er een allergenenbeheersplan?<small>HACCP-plan v7, §3.4</small></div><span class="pill ok">Onderbouwd</span></div>
+    <div class="row"><span class="n">4.7</span><div>Wanneer was de laatste interne audit?<small>Verslag van maart gevonden, ondertekende versie ontbreekt</small></div><span class="pill mid">Gedeeltelijk</span></div>
+    <div class="row"><span class="n">6.1</span><div>Maximale nitrietdosering in chorizo?<small>Drie documenten, drie waarden</small></div><span class="pill cx">Tegenstrijdig</span></div>
+    <div class="row"><span class="n">8.3</span><div>Is de leverancier GFSI-gecertificeerd?<small>Geen certificaat in de map</small></div><span class="pill no">Niet gevonden</span></div>
+  </div>
+</section>
+
+<section id="docs" class="sec"><div class="wrap">
+  <p class="eyebrow">Werkt met je documenten</p>
+  <h2>Google Docs en Word, rechtstreeks in de cloud.</h2>
+  <p class="lede" style="margin-top:16px">Je documenten blijven waar ze staan. Lora leest ze mee, zonder export en zonder losse uploads.</p>
+  <div class="cmp">
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Google Docs</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Specificaties, HACCP-plan en inspectieverslagen in Google Docs worden uitgelezen, met bronvermelding tot op sectie.</p></div>
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Word</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Ook je Word-documenten in de cloud. Bij elk antwoord noemt Lora documentnaam, versie en sectie.</p></div>
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Alleen-lezen</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Leesrechten volstaan. Niets wordt getraind op je data en niets gaat naar je klant zonder jouw akkoord.</p></div>
+  </div>
+</div></section>
+
+<section id="wat" class="sec alt"><div class="wrap">
+  <p class="eyebrow">Wat je krijgt</p>
+  <h2>Geen ingevuld formulier. Een onderbouwd dossier.</h2>
+  <p class="lede" style="margin-top:16px">Elke vraag krijgt precies één status, en elke status is te controleren. Zo besteed je je tijd aan de vragen die jouw oordeel nodig hebben.</p>
+  <div class="grid">
+    <div class="st ok"><h3>Onderbouwd</h3><p>Een document in je eigen set zegt het, met naam, versie en sectie erbij.</p></div>
+    <div class="st mid"><h3>Gedeeltelijk</h3><p>Er is verwant bewijs, maar het beantwoordt de vraag niet volledig. Je ziet meteen wat ontbreekt.</p></div>
+    <div class="st no"><h3>Niet gevonden</h3><p>Geen bron? Dan staat het bij jou, in plaats van als zelfverzekerd “ja” in de bijlage.</p></div>
+    <div class="st cx"><h3>Tegenstrijdig</h3><p>Twee documenten spreken elkaar tegen. Lora kiest niet: ze legt ze naast elkaar en vraagt een beslissing.</p></div>
+  </div>
+</div></section>
+
+<section id="bewijs" class="sec"><div class="wrap">
+  <p class="eyebrow">Voorbeeld uit de praktijk</p>
+  <h2>Eén vraag. Drie antwoorden.</h2>
+  <p class="lede" style="margin-top:16px">Een retailer vraagt naar de maximale dosering nitriet in chorizo. Wat er in de documenten van het bedrijf staat, spreekt elkaar tegen.</p>
+  <div class="cmp">
+    <div class="card"><p class="k">Productspecificatie</p><p class="v">150 mg/kg</p><p>De versie die bovenaan de documentenmap staat.</p></div>
+    <div class="card"><p class="k">Kopie in de FAVV-map</p><p class="v">120 mg/kg</p><p>Hetzelfde document, andere waarde.</p></div>
+    <div class="card" style="border-color:var(--green)"><p class="k" style="color:var(--green)">Verordening (EU) 2023/2108</p><p class="v">80 mg/kg</p><p>Toegevoegde hoeveelheid, verplicht sinds 9 oktober 2025.</p></div>
+  </div>
+  <div class="note">
+    <p>Lora kiest niet. Ze legt de waarden naast elkaar, citeert de verordening, meldt het gemeten restgehalte uit de FAVV-analyse en zet de vraag op <b>tegenstrijdig</b> tot iemand beslist.</p>
+    <p style="font-size:15px;color:var(--soft);margin-top:10px">Je documenten zijn het probleem, niet je antwoord. Een retailer vraagt bewijs, geen geruststelling.</p>
+  </div>
+</div></section>
+
+<section id="pilot" class="pilot"><div class="wrap in">
+  <div>
+    <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8">Pilot</p>
+    <h2 style="margin-top:12px;max-width:22ch">Eén vragenlijst. Nog dezelfde dag klaar voor review. Vaste prijs.</h2>
+    <p style="margin-top:14px;opacity:.9;max-width:52ch">Je krijgt de antwoorden, het reviewrapport met de statussen en de lijst van wat je niet kan bewijzen. Bevalt het niet, dan stopt het daar.</p>
+  </div>
+  <div>
+    <a class="btn" href="mailto:hello@qualora.be?subject=Pilot%20leveranciersvragenlijst">Start de pilot</a>
+    <p style="font-size:14px;opacity:.85;margin-top:14px">hello@qualora.be<br>+32 (0)2 588 42 10</p>
+  </div>
+</div></section>
+
+</main>
+
+<footer><div class="wrap">
+  <div><span style="font-family:var(--serif);font-size:20px;color:var(--ink)">Lora</span><br>Een toepassing van Qualora · AI-ondersteund QA-werk voor de voedingssector · België</div>
+  <div><a href="mailto:hello@qualora.be">hello@qualora.be</a><br><a href="tel:+3225884210">+32 (0)2 588 42 10</a></div>
+</div></footer>
+</div>
+<div class="L" data-l="en" hidden>
+<header><div class="wrap nav">
+  <a class="brand" href="#en-top">Lora.<span class="app">A Qualora application</span></a>
+  <nav>
+    <a href="#en-wat">What you get</a><a href="#en-bewijs">Example</a><a href="#en-docs">Documents</a><a href="#en-pilot">Pilot</a>
+    <span class="lg" role="group" aria-label="Language"><button data-set="nl" aria-pressed="false">NL</button> <button data-set="en" aria-pressed="true">EN</button></span>
+    <a class="btn btn-p" style="padding:10px 16px;font-size:15px" href="mailto:hello@qualora.be?subject=Call%20Lora">Book a call</a>
+  </nav>
+</div></header>
+
+<main id="en-top">
+<section class="wrap hero">
+  <div>
+    <p class="eyebrow">A Qualora application · QA &amp; food safety</p>
+    <h1>Your retailer’s questionnaire. <em>Ready for review the same day,</em> every answer with a source.</h1>
+    <p class="lede" style="margin-top:22px">Lora answers your customers’ quality questionnaires straight from your Google Docs and Word documents: specifications, HACCP plan, inspection reports. What can’t be proven, she flags. You review, sign and send, at your own pace. That turns every QA manager into a super QA manager.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px">
+      <a class="btn btn-p" href="mailto:hello@qualora.be?subject=I%27m%20sending%20a%20questionnaire">Send one questionnaire</a>
+      <a class="btn btn-g" href="#en-bewijs">See an example</a>
+    </div>
+    <ul class="trust"><li>Works with Google Docs and Word</li><li>Read-only access</li><li>Lora never sends anything herself</li></ul>
+  </div>
+  <div class="board" aria-label="Example of the review board">
+    <div class="board-h"><span><b>Retailer audit 2026</b> · 77 questions</span><span>62 ready · 15 for you</span></div>
+    <div class="bar"><i></i></div>
+    <div class="row"><span class="n">4.2</span><div>Is there an allergen management plan?<small>HACCP plan v7, §3.4</small></div><span class="pill ok">Supported</span></div>
+    <div class="row"><span class="n">4.7</span><div>When was the last internal audit?<small>March report found, signed version missing</small></div><span class="pill mid">Partial</span></div>
+    <div class="row"><span class="n">6.1</span><div>Maximum nitrite dose in chorizo?<small>Three documents, three values</small></div><span class="pill cx">Conflicting</span></div>
+    <div class="row"><span class="n">8.3</span><div>Is the supplier GFSI-certified?<small>No certificate in the folder</small></div><span class="pill no">Not found</span></div>
+  </div>
+</section>
+
+<section id="en-docs" class="sec"><div class="wrap">
+  <p class="eyebrow">Works with your documents</p>
+  <h2>Google Docs and Word, straight from the cloud.</h2>
+  <p class="lede" style="margin-top:16px">Your documents stay where they are. Lora reads them in place, with no exports and no loose uploads.</p>
+  <div class="cmp">
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Google Docs</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Specifications, HACCP plan and inspection reports in Google Docs are read directly, with the source cited down to the section.</p></div>
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Word</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Your cloud-hosted Word documents too. For every answer, Lora names the document, version and section.</p></div>
+    <div class="card"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg><h3 style="font-size:21px;margin-top:14px">Read-only</h3><p style="margin-top:8px;color:var(--soft);font-size:15px">Read access is enough. Nothing is trained on your data and nothing goes to your customer without your approval.</p></div>
+  </div>
+</div></section>
+
+<section id="en-wat" class="sec alt"><div class="wrap">
+  <p class="eyebrow">What you get</p>
+  <h2>Not a filled-in form. A documented file.</h2>
+  <p class="lede" style="margin-top:16px">Every question gets exactly one status, and every status can be checked. You spend your time on the questions that need your judgement.</p>
+  <div class="grid">
+    <div class="st ok"><h3>Supported</h3><p>A document in your own set says so, with name, version and section.</p></div>
+    <div class="st mid"><h3>Partial</h3><p>There is related evidence, but it doesn’t fully answer the question. You see at once what’s missing.</p></div>
+    <div class="st no"><h3>Not found</h3><p>No source? Then it lands with you, instead of as a confident “yes” in the attachment.</p></div>
+    <div class="st cx"><h3>Conflicting</h3><p>Two documents contradict each other. Lora doesn’t pick: she lays them side by side and asks for a decision.</p></div>
+  </div>
+</div></section>
+
+<section id="en-bewijs" class="sec"><div class="wrap">
+  <p class="eyebrow">Example from practice</p>
+  <h2>One question. Three answers.</h2>
+  <p class="lede" style="margin-top:16px">A retailer asks for the maximum nitrite dose in chorizo. What the company’s documents say contradicts itself.</p>
+  <div class="cmp">
+    <div class="card"><p class="k">Product specification</p><p class="v">150 mg/kg</p><p>The version at the top of the document folder.</p></div>
+    <div class="card"><p class="k">Copy in the FASFC folder</p><p class="v">120 mg/kg</p><p>Same document, different value.</p></div>
+    <div class="card" style="border-color:var(--green)"><p class="k" style="color:var(--green)">Verordening (EU) 2023/2108</p><p class="v">80 mg/kg</p><p>Added amount, mandatory since 9 October 2025.</p></div>
+  </div>
+  <div class="note">
+    <p>Lora doesn’t pick. She lays the values side by side, cites the regulation, reports the measured residue from the FASFC analysis and marks the question <b>conflicting</b> until someone decides.</p>
+    <p style="font-size:15px;color:var(--soft);margin-top:10px">Your documents are the problem, not your answer. A retailer asks for evidence, not reassurance.</p>
+  </div>
+</div></section>
+
+<section id="en-pilot" class="pilot"><div class="wrap in">
+  <div>
+    <p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8">Pilot</p>
+    <h2 style="margin-top:12px;max-width:22ch">One questionnaire. Ready for review the same day. Fixed price.</h2>
+    <p style="margin-top:14px;opacity:.9;max-width:52ch">You get the answers, the review report with the statuses and the list of what you can’t prove. If you don’t like it, it ends there.</p>
+  </div>
+  <div>
+    <a class="btn" href="mailto:hello@qualora.be?subject=Pilot%20supplier%20questionnaire">Start the pilot</a>
+    <p style="font-size:14px;opacity:.85;margin-top:14px">hello@qualora.be<br>+32 (0)2 588 42 10</p>
+  </div>
+</div></section>
+
+</main>
+
+<footer><div class="wrap">
+  <div><span style="font-family:var(--serif);font-size:20px;color:var(--ink)">Lora</span><br>A Qualora application · AI-supported QA work for the food industry · Belgium</div>
+  <div><a href="mailto:hello@qualora.be">hello@qualora.be</a><br><a href="tel:+3225884210">+32 (0)2 588 42 10</a></div>
+</div></footer>
+</div>
+<script>
+(function(){
+  var els=document.querySelectorAll('.sec .wrap > *, .pilot .in > *');
+  if(!('IntersectionObserver' in window)){return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+  els.forEach(function(el,i){el.classList.add('rv');el.style.transitionDelay=(i%4)*60+'ms';io.observe(el);});
+})();
+</script>
+<script>
+(function(){
+  var L=document.querySelectorAll('.L'),lang='nl';
+  function guess(){return (navigator.language||'nl').slice(0,2)==='nl'?'nl':'en'}
+  try{var s=localStorage.getItem('lora-lang');lang=(s==='nl'||s==='en')?s:guess()}catch(e){lang=guess()}
+  var T={nl:'Lora — de assistent voor leveranciersvragenlijsten | een toepassing van Qualora',en:'Lora — the supplier questionnaire assistant | a Qualora application'};
+  function set(l){
+    L.forEach(function(d){d.hidden=d.getAttribute('data-l')!==l});
+    document.documentElement.lang=l==='nl'?'nl-BE':'en';document.title=T[l];
+    document.querySelectorAll('.lg button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-set')===l))});
+    try{localStorage.setItem('lora-lang',l)}catch(e){}
+  }
+  document.querySelectorAll('.lg button').forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-set'));window.scrollTo(0,0)})});
+  set(lang);
+})();
+</script>
+</body>
+</html>

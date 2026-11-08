@@ -18,4 +18,8 @@ export interface Translations {
   ct: string;
   cd: string;
   ft: string;
+  le: string;
+  lt: string;
+  ld: string;
+  lb: string;
 }

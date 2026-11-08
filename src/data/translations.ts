@@ -18,7 +18,11 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     fa: "Every project starts with a free audit.",
     ct: "Request a discovery call.",
     cd: "Tell us about your company. The call includes a free audit of where AI can help.",
-    ft: "Working name, to be confirmed."
+    ft: "Working name, to be confirmed.",
+    le: "Meet one of our applications",
+    lt: "Lora, the supplier questionnaire assistant.",
+    ld: "Lora answers the quality questionnaires your retailers send, using your own documents. Every answer has a source, and you sign and send.",
+    lb: "Meet Lora →"
   },
   nl: {
     n1: "Wat we doen",
@@ -37,7 +41,11 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     fa: "Elk project begint met een gratis audit.",
     ct: "Vraag een kennismakingsgesprek aan.",
     cd: "Vertel ons over uw bedrijf. Het gesprek bevat een gratis audit van waar AI kan helpen.",
-    ft: "Werknaam, nog te bevestigen."
+    ft: "Werknaam, nog te bevestigen.",
+    le: "Maak kennis met een van onze toepassingen",
+    lt: "Lora, de assistent voor leveranciersvragenlijsten.",
+    ld: "Lora beantwoordt de kwaliteitsvragenlijsten van uw retailers uit uw eigen documenten. Elk antwoord met een bron, en u ondertekent en verzendt.",
+    lb: "Ontdek Lora →"
   },
   fr: {
     n1: "Ce que nous faisons",
@@ -50,14 +58,19 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     e1: "Ce que nous faisons",
     t1: "De la première question à la solution qui fonctionne.",
     c1t: "Conseil en IA",
-    c1d: "Une vision claire de là où l’IA est rentable dans votre entreprise, une feuille de route pratique et une formation pour votre équipe.",
+    c1d: "Une vision claire de là où l’IA est rentable dans votre entreprise, une feuille de route pratique et une formation voor votre équipe.",
     c2t: "Automatisation des workflows",
     c2d: "Une automatisation construite autour de la façon dont votre équipe travaille déjà, avec vos équipes aux commandes.",
     fa: "Chaque projet commence par un audit gratuit.",
     ct: "Demander un appel de découverte.",
     cd: "Parlez-nous de votre entreprise. L’appel comprend un audit gratuit des endroits où l’IA peut aider.",
-    ft: "Nom de travail, à confirmer."
+    ft: "Nom de travail, à confirmer.",
+    le: "Découvrez l’une de nos applications",
+    lt: "Lora, l’assistante pour les questionnaires fournisseurs.",
+    ld: "Lora répond aux questionnaires qualité de vos distributeurs à partir de vos propres documents. Chaque réponse a sa source, et vous signez et envoyez.",
+    lb: "Découvrir Lora →"
   }
 };
 
 export const TYPEFORM_FEEDBACK_URL = "https://form.typeform.com/to/QPVgVwTY";
+export const LORA_URL = "https://claude.ai/artifact/CP7GX7E4MCbdHgYGjHvjUZ";
